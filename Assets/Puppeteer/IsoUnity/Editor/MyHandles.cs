@@ -33,115 +33,115 @@ public class MyHandles
         RMBRelease,
     };
 
-    public static Vector3 DragHandle(Vector3 position, Quaternion angle, float handleSize, Handles.DrawCapFunction capFunc, Color colorSelected, Color colorIdle, out DragHandleResult result)
-    {
-        int id = GUIUtility.GetControlID(s_DragHandleHash, FocusType.Passive);
-        lastDragHandleID = id;
+    //public static Vector3 DragHandle(Vector3 position, Quaternion angle, float handleSize, Handles.DrawCapFunction capFunc, Color colorSelected, Color colorIdle, out DragHandleResult result)
+    //{
+    //    int id = GUIUtility.GetControlID(s_DragHandleHash, FocusType.Passive);
+    //    lastDragHandleID = id;
 
-        Vector3 screenPosition = Handles.matrix.MultiplyPoint(position);
-        Matrix4x4 cachedMatrix = Handles.matrix;
+    //    Vector3 screenPosition = Handles.matrix.MultiplyPoint(position);
+    //    Matrix4x4 cachedMatrix = Handles.matrix;
 
-        result = DragHandleResult.none;
+    //    result = DragHandleResult.none;
 
-        switch (Event.current.GetTypeForControl(id))
-        {
-            case EventType.MouseDown:
-                if (HandleUtility.nearestControl == id && (Event.current.button == 0))
-                {
-                    GUIUtility.hotControl = id;
-                    s_DragHandleMouseCurrent = s_DragHandleMouseStart = Event.current.mousePosition;
-                    s_DragHandleWorldStart = position;
-                    s_DragHandleHasMoved = false;
+    //    switch (Event.current.GetTypeForControl(id))
+    //    {
+    //        case EventType.MouseDown:
+    //            if (HandleUtility.nearestControl == id && (Event.current.button == 0))
+    //            {
+    //                GUIUtility.hotControl = id;
+    //                s_DragHandleMouseCurrent = s_DragHandleMouseStart = Event.current.mousePosition;
+    //                s_DragHandleWorldStart = position;
+    //                s_DragHandleHasMoved = false;
 
-                    Event.current.Use();
-                    EditorGUIUtility.SetWantsMouseJumping(1);
+    //                Event.current.Use();
+    //                EditorGUIUtility.SetWantsMouseJumping(1);
 
-                    if (Event.current.button == 0)
-                        result = DragHandleResult.LMBPress;
-                    else if (Event.current.button == 1)
-                        result = DragHandleResult.RMBPress;
-                }
-                break;
+    //                if (Event.current.button == 0)
+    //                    result = DragHandleResult.LMBPress;
+    //                else if (Event.current.button == 1)
+    //                    result = DragHandleResult.RMBPress;
+    //            }
+    //            break;
 
-            case EventType.MouseUp:
-                if (GUIUtility.hotControl == id && (Event.current.button == 0))
-                {
-                    GUIUtility.hotControl = 0;
-                    Event.current.Use();
-                    EditorGUIUtility.SetWantsMouseJumping(0);
+    //        case EventType.MouseUp:
+    //            if (GUIUtility.hotControl == id && (Event.current.button == 0))
+    //            {
+    //                GUIUtility.hotControl = 0;
+    //                Event.current.Use();
+    //                EditorGUIUtility.SetWantsMouseJumping(0);
 
-                    if (Event.current.button == 0)
-                        result = DragHandleResult.LMBRelease;
-                    else if (Event.current.button == 1)
-                        result = DragHandleResult.RMBRelease;
+    //                if (Event.current.button == 0)
+    //                    result = DragHandleResult.LMBRelease;
+    //                else if (Event.current.button == 1)
+    //                    result = DragHandleResult.RMBRelease;
 
-                    if (Event.current.mousePosition == s_DragHandleMouseStart)
-                    {
-                        bool doubleClick = (s_DragHandleClickID == id) &&
-                            (Time.realtimeSinceStartup - s_DragHandleClickTime < s_DragHandleDoubleClickInterval);
+    //                if (Event.current.mousePosition == s_DragHandleMouseStart)
+    //                {
+    //                    bool doubleClick = (s_DragHandleClickID == id) &&
+    //                        (Time.realtimeSinceStartup - s_DragHandleClickTime < s_DragHandleDoubleClickInterval);
 
-                        s_DragHandleClickID = id;
-                        s_DragHandleClickTime = Time.realtimeSinceStartup;
+    //                    s_DragHandleClickID = id;
+    //                    s_DragHandleClickTime = Time.realtimeSinceStartup;
 
-                        if (Event.current.button == 0)
-                            result = doubleClick ? DragHandleResult.LMBDoubleClick : DragHandleResult.LMBClick;
-                        else if (Event.current.button == 1)
-                            result = doubleClick ? DragHandleResult.RMBDoubleClick : DragHandleResult.RMBClick;
-                    }
-                }
-                break;
+    //                    if (Event.current.button == 0)
+    //                        result = doubleClick ? DragHandleResult.LMBDoubleClick : DragHandleResult.LMBClick;
+    //                    else if (Event.current.button == 1)
+    //                        result = doubleClick ? DragHandleResult.RMBDoubleClick : DragHandleResult.RMBClick;
+    //                }
+    //            }
+    //            break;
 
-            case EventType.MouseDrag:
-                if (GUIUtility.hotControl == id)
-                {
-                    s_DragHandleMouseCurrent += new Vector2(Event.current.delta.x, -Event.current.delta.y);
-                    Vector3 position2 = Camera.current.WorldToScreenPoint(Handles.matrix.MultiplyPoint(s_DragHandleWorldStart))
-                        + (Vector3)(s_DragHandleMouseCurrent - s_DragHandleMouseStart);
-                    position = Handles.matrix.inverse.MultiplyPoint(Camera.current.ScreenToWorldPoint(position2));
+    //        case EventType.MouseDrag:
+    //            if (GUIUtility.hotControl == id)
+    //            {
+    //                s_DragHandleMouseCurrent += new Vector2(Event.current.delta.x, -Event.current.delta.y);
+    //                Vector3 position2 = Camera.current.WorldToScreenPoint(Handles.matrix.MultiplyPoint(s_DragHandleWorldStart))
+    //                    + (Vector3)(s_DragHandleMouseCurrent - s_DragHandleMouseStart);
+    //                position = Handles.matrix.inverse.MultiplyPoint(Camera.current.ScreenToWorldPoint(position2));
 
-                    if (Camera.current.transform.forward == Vector3.forward || Camera.current.transform.forward == -Vector3.forward)
-                        position.z = s_DragHandleWorldStart.z;
-                    if (Camera.current.transform.forward == Vector3.up || Camera.current.transform.forward == -Vector3.up)
-                        position.y = s_DragHandleWorldStart.y;
-                    if (Camera.current.transform.forward == Vector3.right || Camera.current.transform.forward == -Vector3.right)
-                        position.x = s_DragHandleWorldStart.x;
+    //                if (Camera.current.transform.forward == Vector3.forward || Camera.current.transform.forward == -Vector3.forward)
+    //                    position.z = s_DragHandleWorldStart.z;
+    //                if (Camera.current.transform.forward == Vector3.up || Camera.current.transform.forward == -Vector3.up)
+    //                    position.y = s_DragHandleWorldStart.y;
+    //                if (Camera.current.transform.forward == Vector3.right || Camera.current.transform.forward == -Vector3.right)
+    //                    position.x = s_DragHandleWorldStart.x;
 
-                    if (Event.current.button == 0)
-                        result = DragHandleResult.LMBDrag;
-                    else if (Event.current.button == 1)
-                        result = DragHandleResult.RMBDrag;
+    //                if (Event.current.button == 0)
+    //                    result = DragHandleResult.LMBDrag;
+    //                else if (Event.current.button == 1)
+    //                    result = DragHandleResult.RMBDrag;
 
-                    s_DragHandleHasMoved = true;
+    //                s_DragHandleHasMoved = true;
 
-                    GUI.changed = true;
-                    Event.current.Use();
-                }
-                break;
+    //                GUI.changed = true;
+    //                Event.current.Use();
+    //            }
+    //            break;
 
-            case EventType.Repaint:
-                Color currentColour = Handles.color;
-                if (s_DragHandleHasMoved)
-                    s_DragHandleHasMoved = !(!s_DragHandleHasMoved); // Shut up please :D
+    //        case EventType.Repaint:
+    //            Color currentColour = Handles.color;
+    //            if (s_DragHandleHasMoved)
+    //                s_DragHandleHasMoved = !(!s_DragHandleHasMoved); // Shut up please :D
 
-                if (id == GUIUtility.hotControl)
-                    Handles.color = colorSelected;
-                else
-                    Handles.color = colorIdle;
+    //            if (id == GUIUtility.hotControl)
+    //                Handles.color = colorSelected;
+    //            else
+    //                Handles.color = colorIdle;
 
-                Handles.matrix = Matrix4x4.identity;
-                capFunc(id, screenPosition, angle, handleSize);
-                Handles.matrix = cachedMatrix;
+    //            Handles.matrix = Matrix4x4.identity;
+    //            capFunc(id, screenPosition, angle, handleSize);
+    //            Handles.matrix = cachedMatrix;
 
-                Handles.color = currentColour;
-                break;
+    //            Handles.color = currentColour;
+    //            break;
 
-            case EventType.Layout:
-                Handles.matrix = Matrix4x4.identity;
-                HandleUtility.AddControl(id, HandleUtility.DistanceToCircle(screenPosition, handleSize));
-                Handles.matrix = cachedMatrix;
-                break;
-        }
+    //        case EventType.Layout:
+    //            Handles.matrix = Matrix4x4.identity;
+    //            HandleUtility.AddControl(id, HandleUtility.DistanceToCircle(screenPosition, handleSize));
+    //            Handles.matrix = cachedMatrix;
+    //            break;
+    //    }
 
-        return position;
-    }
+    //    return position;
+    //}
 }
