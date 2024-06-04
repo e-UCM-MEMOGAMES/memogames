@@ -81,8 +81,8 @@ namespace IsoUnity
 
 
             Game.m = this;
-            if (Application.isPlaying)
-                GameObject.DontDestroyOnLoad(this.gameObject);
+            //if (Application.isPlaying)
+            //    GameObject.DontDestroyOnLoad(this.gameObject);
 
             // Event Queue
             events = new Queue<IGameEvent>();

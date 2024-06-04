@@ -19,16 +19,17 @@ public class ChoosePartner : MonoBehaviour {
 		this._gs = GameObject.FindObjectOfType<GameState> ();
 		this._partner = GameObject.Find ("Partner");
 
+		Debug.Log(_gs.playerGender);
 
-			if (_gs.playerGender == GameState.Gender.M)
-				this._sprite = Resources.Load<Sprite> (wifePath);
-			else
-				this._sprite = Resources.Load<Sprite> (husbandPath);
+		if (_gs.playerGender == GameState.Gender.M)
+			this._sprite = Resources.Load<Sprite> (wifePath);
+		else
+			this._sprite = Resources.Load<Sprite> (husbandPath);
 
-			SpriteRenderer sp = this._partner.GetComponent<SpriteRenderer> ();
+		SpriteRenderer sp = this._partner.GetComponent<SpriteRenderer> ();
        
-			sp.sprite = this._sprite;
-			//Instantiate(this._partner);
+		sp.sprite = this._sprite;
+		//Instantiate(this._partner);
 
 	}
 	// Update is called once per frame
