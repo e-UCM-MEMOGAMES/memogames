@@ -17,6 +17,7 @@ public class ConversationLauncher : MonoBehaviour {
         var ge = new GameEvent("start sequence", new System.Collections.Generic.Dictionary<string, object>() {
                     { "sequence", seq }
                 });
+        Debug.Log(Game.main);
         Game.main.enqueueEvent(ge);
     }
 
